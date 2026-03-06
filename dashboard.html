@@ -1,0 +1,1027 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - CNPG | โรงพยาบาลชลบุรี</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@fontsource/sarabun@5.0.0/index.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-blue: #1e3a8a;
+            --secondary-blue: #3b82f6;
+            --light-blue: #dbeafe;
+            --medical-white: #f8fafc;
+            --medical-gray: #e2e8f0;
+            --success-green: #10b981;
+            --warning-orange: #f59e0b;
+            --danger-red: #ef4444;
+            --purple: #8b5cf6;
+        }
+        
+        * {
+            font-family: 'Sarabun', sans-serif;
+        }
+        
+        body {
+            background: var(--medical-white);
+            min-height: 100vh;
+        }
+        
+        /* Navbar Styles */
+        .navbar-custom {
+            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--secondary-blue) 100%);
+            box-shadow: 0 4px 20px rgba(30, 58, 138, 0.2);
+            padding: 15px 0;
+        }
+        
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.3rem;
+            color: white !important;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .navbar-brand img {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: white;
+            padding: 5px;
+        }
+        
+        .navbar-nav .nav-link {
+            color: rgba(255,255,255,0.9) !important;
+            font-weight: 500;
+            padding: 10px 20px !important;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+        
+        .navbar-nav .nav-link:hover,
+        .navbar-nav .nav-link.active {
+            background: rgba(255,255,255,0.15);
+            color: white !important;
+        }
+        
+        .navbar-nav .nav-link i {
+            margin-right: 8px;
+        }
+        
+        .user-info {
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(255,255,255,0.1);
+            padding: 8px 15px;
+            border-radius: 25px;
+        }
+        
+        .user-avatar {
+            width: 35px;
+            height: 35px;
+            background: white;
+            color: var(--primary-blue);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+        }
+        
+        /* Main Content */
+        .main-content {
+            padding: 30px 20px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        /* Stats Cards */
+        .stats-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            border: none;
+            transition: all 0.3s ease;
+            height: 100%;
+        }
+        
+        .stats-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+        }
+        
+        .stats-card .icon-wrapper {
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+        }
+        
+        .stats-card .icon-blue {
+            background: var(--light-blue);
+            color: var(--secondary-blue);
+        }
+        
+        .stats-card .icon-green {
+            background: #d1fae5;
+            color: var(--success-green);
+        }
+        
+        .stats-card .icon-purple {
+            background: #ede9fe;
+            color: var(--purple);
+        }
+        
+        .stats-card .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary-blue);
+            line-height: 1;
+        }
+        
+        .stats-card .stat-label {
+            color: #64748b;
+            font-size: 0.95rem;
+            margin-top: 5px;
+        }
+        
+        /* Search & Filter Section */
+        .search-section {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            margin-bottom: 30px;
+        }
+        
+        .search-section h5 {
+            color: var(--primary-blue);
+            font-weight: 600;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        /* Table Styles */
+        .table-container {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            overflow-x: auto;
+        }
+        
+        .table thead th {
+            background: var(--light-blue);
+            color: var(--primary-blue);
+            font-weight: 600;
+            border: none;
+            padding: 15px;
+            white-space: nowrap;
+        }
+        
+        .table tbody td {
+            padding: 15px;
+            vertical-align: middle;
+            border-color: var(--medical-gray);
+        }
+        
+        .table tbody tr:hover {
+            background: var(--light-blue);
+        }
+        
+        .badge-category {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-weight: 500;
+            font-size: 0.85rem;
+        }
+        
+        .badge-guideline {
+            background: #dbeafe;
+            color: var(--secondary-blue);
+        }
+        
+        .badge-protocol {
+            background: #d1fae5;
+            color: var(--success-green);
+        }
+        
+        .badge-sop {
+            background: #ede9fe;
+            color: var(--purple);
+        }
+        
+        .btn-action {
+            padding: 6px 12px;
+            font-size: 0.85rem;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+        }
+        
+        .btn-view {
+            background: var(--light-blue);
+            color: var(--secondary-blue);
+            border: none;
+        }
+        
+        .btn-view:hover {
+            background: var(--secondary-blue);
+            color: white;
+        }
+        
+        .btn-edit {
+            background: #fef3c7;
+            color: var(--warning-orange);
+            border: none;
+        }
+        
+        .btn-edit:hover {
+            background: var(--warning-orange);
+            color: white;
+        }
+        
+        .btn-delete {
+            background: #fee2e2;
+            color: var(--danger-red);
+            border: none;
+        }
+        
+        .btn-delete:hover {
+            background: var(--danger-red);
+            color: white;
+        }
+        
+        /* Modal Styles */
+        .modal-header {
+            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--secondary-blue) 100%);
+            color: white;
+            border-radius: 15px 15px 0 0;
+        }
+        
+        .modal-header .btn-close {
+            filter: invert(1);
+        }
+        
+        .modal-body {
+            padding: 30px;
+        }
+        
+        .modal-footer {
+            border-top: 1px solid var(--medical-gray);
+            padding: 20px 30px;
+        }
+        
+        /* Loading Overlay */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255,255,255,0.9);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+        }
+        
+        .loading-overlay.active {
+            display: flex;
+        }
+        
+        .loading-content {
+            text-align: center;
+        }
+        
+        .loading-content .spinner-border {
+            width: 50px;
+            height: 50px;
+            color: var(--secondary-blue);
+        }
+        
+        .loading-content p {
+            margin-top: 15px;
+            color: var(--primary-blue);
+            font-weight: 600;
+        }
+        
+        /* Toast Notification */
+        .toast-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 9999;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .navbar-brand span {
+                display: none;
+            }
+            
+            .user-info span {
+                display: none;
+            }
+            
+            .stats-card .stat-number {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-custom sticky-top">
+        <div class="container-fluid px-4">
+            <a class="navbar-brand" href="#">
+                <img src="https://image.qwenlm.ai/public_source/88af0300-2ede-49aa-a1e1-50cd82aa4c25/166cefe98-3f1e-415b-a28e-61da161d2a4d.png" alt="Logo">
+                <span>CNPG System</span>
+            </a>
+            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="dashboard.html">
+                            <i class="bi bi-speedometer2"></i>Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" onclick="showGuidelineList()">
+                            <i class="bi bi-file-earmark-text"></i>รายการ Guideline
+                        </a>
+                    </li>
+                </ul>
+                
+                <div class="d-flex align-items-center gap-3">
+                    <div class="user-info">
+                        <div class="user-avatar" id="userAvatar">A</div>
+                        <span id="userName">Admin</span>
+                        <span class="badge bg-light text-primary" id="userRole">admin</span>
+                    </div>
+                    <button class="btn btn-outline-light btn-sm" onclick="logout()">
+                        <i class="bi bi-box-arrow-right"></i> ออกจากระบบ
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    <div class="main-content">
+        <div class="row g-4 mb-4">
+            <div class="col-md-4">
+                <div class="stats-card">
+                    <div class="icon-wrapper icon-blue">
+                        <i class="bi bi-file-earmark-text"></i>
+                    </div>
+                    <div class="stat-number" id="totalGuidelines">0</div>
+                    <div class="stat-label">Clinical Guidelines</div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="stats-card">
+                    <div class="icon-wrapper icon-green">
+                        <i class="bi bi-clipboard-check"></i>
+                    </div>
+                    <div class="stat-number" id="totalProtocols">0</div>
+                    <div class="stat-label">Nursing Protocols</div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="stats-card">
+                    <div class="icon-wrapper icon-purple">
+                        <i class="bi bi-journal-bookmark"></i>
+                    </div>
+                    <div class="stat-number" id="totalSOP">0</div>
+                    <div class="stat-label">Standard Operating Procedures</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="search-section">
+            <h5>
+                <i class="bi bi-search"></i>ค้นหาและกรองข้อมูล
+            </h5>
+            <div class="row g-3">
+                <div class="col-md-4">
+                    <label class="form-label">ค้นหา</label>
+                    <input type="text" class="form-control" id="searchInput" placeholder="ค้นหาชื่อ, หมวดหมู่, แผนก...">
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">หมวดหมู่</label>
+                    <select class="form-select" id="filterCategory">
+                        <option value="">ทั้งหมด</option>
+                        <option value="Guideline">Guideline</option>
+                        <option value="Protocol">Protocol</option>
+                        <option value="SOP">SOP</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">กลุ่มงาน</label>
+                    <select class="form-select" id="filterGroup">
+                        <option value="">ทั้งหมด</option>
+                    </select>
+                </div>
+                <div class="col-md-2 d-flex align-items-end">
+                    <button class="btn btn-primary w-100" onclick="searchGuidelines()">
+                        <i class="bi bi-search me-2"></i>ค้นหา
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="table-container">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h5 class="mb-0">
+                    <i class="bi bi-list-ul me-2"></i>รายการแนวทางการพยาบาล
+                </h5>
+                <button class="btn btn-success admin-only" onclick="showAddModal()" style="display: none;">
+                    <i class="bi bi-plus-lg me-2"></i>เพิ่ม Guideline
+                </button>
+            </div>
+            
+            <div class="table-responsive">
+                <table class="table table-hover" id="guidelineTable">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>ชื่อเรื่อง</th>
+                            <th>หมวดหมู่</th>
+                            <th>กลุ่มงาน</th>
+                            <th>แผนก</th>
+                            <th>วันที่สร้าง</th>
+                            <th>PDF</th>
+                            <th class="admin-only" style="display: none;">จัดการ</th>
+                        </tr>
+                    </thead>
+                    <tbody id="guidelineTableBody">
+                        <tr>
+                            <td colspan="8" class="text-center py-5">
+                                <div class="spinner-border text-primary" role="status">
+                                    <span class="visually-hidden">Loading...</span>
+                                </div>
+                                <p class="mt-3 text-muted">กำลังโหลดข้อมูล...</p>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    
+    <div class="modal fade" id="guidelineModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalTitle">
+                        <i class="bi bi-plus-lg me-2"></i>เพิ่ม Guideline ใหม่
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="guidelineForm">
+                        <input type="hidden" id="guidelineId">
+                        
+                        <div class="row g-3">
+                            <div class="col-md-12">
+                                <label class="form-label">ชื่อเรื่อง <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="formTitle" required>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <label class="form-label">หมวดหมู่ <span class="text-danger">*</span></label>
+                                <select class="form-select" id="formCategory" required>
+                                    <option value="">เลือกหมวดหมู่</option>
+                                    <option value="Guideline">Guideline</option>
+                                    <option value="Protocol">Protocol</option>
+                                    <option value="SOP">SOP</option>
+                                </select>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <label class="form-label">กลุ่มงาน <span class="text-danger">*</span></label>
+                                <select class="form-select" id="formGroupName" required onchange="loadDepartments()">
+                                    <option value="">เลือกกลุ่มงาน</option>
+                                </select>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <label class="form-label">รหัสแผนก <span class="text-danger">*</span></label>
+                                <select class="form-select" id="formDepartmentCode" required onchange="autoFillDeptName()">
+                                    <option value="">เลือกแผนก</option>
+                                </select>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <label class="form-label">ชื่อแผนก</label>
+                                <input type="text" class="form-control" id="formDepartmentName" readonly>
+                            </div>
+                            
+                            <div class="col-md-12">
+                                <label class="form-label">ลิงก์ PDF <span class="text-danger">*</span></label>
+                                <input type="url" class="form-control" id="formPdfLink" placeholder="https://example.com/document.pdf" required>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn-secondary" data-bs-dismiss="modal">ยกเลิก</button>
+                    <button type="button" class="btn btn-primary" onclick="saveGuideline()">
+                        <i class="bi bi-check-lg me-2"></i>บันทึก
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="modal fade" id="deleteModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-danger text-white">
+                    <h5 class="modal-title">
+                        <i class="bi bi-exclamation-triangle me-2"></i>ยืนยันการลบ
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <p>คุณแน่ใจหรือไม่ที่ต้องการลบ Guideline นี้?</p>
+                    <p class="text-muted">การดำเนินการนี้ไม่สามารถย้อนกลับได้</p>
+                    <input type="hidden" id="deleteGuidelineId">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ยกเลิก</button>
+                    <button type="button" class="btn btn-danger" onclick="confirmDelete()">
+                        <i class="bi bi-trash me-2"></i>ลบ
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-content">
+            <div class="spinner-border" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+            <p id="loadingText">กำลังโหลด...</p>
+        </div>
+    </div>
+    
+    <div class="toast-container" id="toastContainer"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script src="js/app.js"></script>
+    
+    <script>
+        // Google Apps Script Web App URL
+        const GAS_URL = 'https://script.google.com/macros/s/AKfycbx5u9vEesY18yBkXt-oIqw_QD1yeOmig9GWB9THxcGUNJaIfQRNUzlf17CtP9v7LFIt/exec';
+        
+        let currentUser = null;
+        let allGuidelines = [];
+        let departments = [];
+        
+        // ตรวจสอบการเข้าสู่ระบบ
+        document.addEventListener('DOMContentLoaded', function() {
+            const userData = localStorage.getItem('cnpg_user');
+            if (!userData) {
+                window.location.href = 'index.html';
+                return;
+            }
+            
+            currentUser = JSON.parse(userData);
+            updateUserInfo();
+            loadDepartmentsList(); // โหลดข้อมูลแผนก
+            loadGuidelines();      // โหลดข้อมูล Guideline
+        });
+        
+        // อัปเดตข้อมูลผู้ใช้ใน Navbar
+        function updateUserInfo() {
+            document.getElementById('userName').textContent = currentUser.Name || currentUser.username;
+            document.getElementById('userRole').textContent = currentUser.Role;
+            document.getElementById('userAvatar').textContent = (currentUser.Name || currentUser.username).charAt(0).toUpperCase();
+            
+            // แสดง/ซ่อนปุ่ม Admin
+            if (currentUser.Role === 'admin') {
+                document.querySelectorAll('.admin-only').forEach(el => {
+                    el.style.display = '';
+                });
+            }
+        }
+        
+        // โหลดรายการแผนกสำหรับ Filter และ ฟอร์มเพิ่มข้อมูล
+        async function loadDepartmentsList() {
+            try {
+                const response = await fetch(GAS_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' }, // 🛑 แก้ปัญหา CORS ตรงนี้
+                    body: JSON.stringify({ action: 'getDepartments' })
+                });
+                
+                const result = await response.json();
+                if (result.success) {
+                    departments = result.data;
+                    
+                    // ใส่ข้อมูลใน Dropdown ค้นหา
+                    const groupNames = [...new Set(departments.map(d => d.GroupName))];
+                    const filterGroup = document.getElementById('filterGroup');
+                    
+                    // ใส่ข้อมูลใน Dropdown หน้าฟอร์มเพิ่ม Guideline
+                    const formGroupName = document.getElementById('formGroupName');
+                    
+                    groupNames.forEach(name => {
+                        if(name) {
+                            filterGroup.insertAdjacentHTML('beforeend', `<option value="${name}">${name}</option>`);
+                            formGroupName.insertAdjacentHTML('beforeend', `<option value="${name}">${name}</option>`);
+                        }
+                    });
+                }
+            } catch (error) {
+                console.error('Error loading departments:', error);
+            }
+        }
+        
+        // โหลดแผนกย่อย (หอผู้ป่วย) เมื่อมีการเลือก "กลุ่มงาน" ในหน้าฟอร์ม
+        function loadDepartments() {
+            const groupName = document.getElementById('formGroupName').value;
+            const deptSelect = document.getElementById('formDepartmentCode');
+            
+            deptSelect.innerHTML = '<option value="">เลือกแผนก</option>';
+            document.getElementById('formDepartmentName').value = ''; // เคลียร์ช่องชื่อแผนก
+            
+            const filtered = departments.filter(d => d.GroupName === groupName);
+            filtered.forEach(dept => {
+                const option = document.createElement('option');
+                option.value = dept.DepartmentCode;
+                option.textContent = dept.DepartmentCode + ' - ' + dept.DepartmentName;
+                deptSelect.appendChild(option);
+            });
+        }
+        
+        // Auto fill ชื่อแผนกในหน้าฟอร์ม
+        function autoFillDeptName() {
+            const deptCode = document.getElementById('formDepartmentCode').value;
+            const dept = departments.find(d => d.DepartmentCode === deptCode);
+            if (dept) {
+                document.getElementById('formDepartmentName').value = dept.DepartmentName;
+            }
+        }
+        
+        // โหลดรายการ Guidelines
+        async function loadGuidelines() {
+            showLoading(true, 'กำลังโหลดข้อมูล...');
+            
+            try {
+                const response = await fetch(GAS_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' }, // 🛑 แก้ปัญหา CORS
+                    body: JSON.stringify({ action: 'getGuidelines' })
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    allGuidelines = result.data;
+                    updateStats();
+                    renderGuidelineTable(allGuidelines);
+                } else {
+                    showToast('เกิดข้อผิดพลาดในการโหลดข้อมูล', 'danger');
+                }
+            } catch (error) {
+                console.error('Error loading guidelines:', error);
+                showToast('ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้', 'danger');
+            } finally {
+                showLoading(false);
+            }
+        }
+        
+        // อัปเดตสถิติตัวเลข
+        function updateStats() {
+            const guidelines = allGuidelines.filter(g => g.Category === 'Guideline').length;
+            const protocols = allGuidelines.filter(g => g.Category === 'Protocol').length;
+            const sops = allGuidelines.filter(g => g.Category === 'SOP').length;
+            
+            animateNumber('totalGuidelines', guidelines);
+            animateNumber('totalProtocols', protocols);
+            animateNumber('totalSOP', sops);
+        }
+        
+        // อนิเมชั่นตัวเลข
+        function animateNumber(elementId, target) {
+            const element = document.getElementById(elementId);
+            const duration = 1000;
+            const start = 0;
+            const increment = target / (duration / 16);
+            let current = start;
+            
+            if(target === 0) {
+                element.textContent = 0;
+                return;
+            }
+            
+            const timer = setInterval(() => {
+                current += increment;
+                if (current >= target) {
+                    element.textContent = target;
+                    clearInterval(timer);
+                } else {
+                    element.textContent = Math.floor(current);
+                }
+            }, 16);
+        }
+        
+        // แสดงตาราง Guidelines
+        function renderGuidelineTable(data) {
+            const tbody = document.getElementById('guidelineTableBody');
+            
+            if (data.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="8" class="text-center py-5">
+                            <i class="bi bi-inbox" style="font-size: 3rem; color: #cbd5e1;"></i>
+                            <p class="mt-3 text-muted">ไม่พบข้อมูล</p>
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+            
+            tbody.innerHTML = data.map(item => `
+                <tr>
+                    <td><code>${item.ID}</code></td>
+                    <td>${item.Title}</td>
+                    <td>
+                        <span class="badge badge-category badge-${item.Category.toLowerCase()}">${item.Category}</span>
+                    </td>
+                    <td>${item.GroupName}</td>
+                    <td>${item.DepartmentName}</td>
+                    <td>${formatDate(item.Created_Date)}</td>
+                    <td>
+                        <a href="${item.PDF_Link}" target="_blank" class="btn btn-action btn-view">
+                            <i class="bi bi-file-earmark-pdf"></i> เปิด PDF
+                        </a>
+                    </td>
+                    <td class="admin-only" style="display: ${currentUser.Role === 'admin' ? '' : 'none'}">
+                        <button class="btn btn-action btn-edit" onclick="showEditModal('${item.ID}')">
+                            <i class="bi bi-pencil"></i>
+                        </button>
+                        <button class="btn btn-action btn-delete" onclick="showDeleteModal('${item.ID}')">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+        
+        // ค้นหา Guidelines
+        function searchGuidelines() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const category = document.getElementById('filterCategory').value;
+            const group = document.getElementById('filterGroup').value;
+            
+            let filtered = allGuidelines;
+            
+            if (searchTerm) {
+                filtered = filtered.filter(item => 
+                    item.Title.toLowerCase().includes(searchTerm) ||
+                    item.DepartmentName.toLowerCase().includes(searchTerm) ||
+                    item.Category.toLowerCase().includes(searchTerm)
+                );
+            }
+            
+            if (category) {
+                filtered = filtered.filter(item => item.Category === category);
+            }
+            
+            if (group) {
+                filtered = filtered.filter(item => item.GroupName === group);
+            }
+            
+            renderGuidelineTable(filtered);
+        }
+        
+        // แสดง Modal เพิ่ม
+        function showAddModal() {
+            document.getElementById('modalTitle').innerHTML = '<i class="bi bi-plus-lg me-2"></i>เพิ่ม Guideline ใหม่';
+            document.getElementById('guidelineForm').reset();
+            document.getElementById('guidelineId').value = '';
+            document.getElementById('formDepartmentCode').innerHTML = '<option value="">เลือกแผนก</option>';
+            new bootstrap.Modal(document.getElementById('guidelineModal')).show();
+        }
+        
+        // แสดง Modal แก้ไข
+        function showEditModal(id) {
+            const item = allGuidelines.find(g => g.ID === id);
+            if (!item) return;
+            
+            document.getElementById('modalTitle').innerHTML = '<i class="bi bi-pencil me-2"></i>แก้ไข Guideline';
+            document.getElementById('guidelineId').value = item.ID;
+            document.getElementById('formTitle').value = item.Title;
+            document.getElementById('formCategory').value = item.Category;
+            document.getElementById('formGroupName').value = item.GroupName;
+            
+            // เรียกโหลดแผนกก่อน แล้วค่อยเซ็ตค่า
+            loadDepartments();
+            document.getElementById('formDepartmentCode').value = item.DepartmentCode;
+            document.getElementById('formDepartmentName').value = item.DepartmentName;
+            document.getElementById('formPdfLink').value = item.PDF_Link;
+            
+            new bootstrap.Modal(document.getElementById('guidelineModal')).show();
+        }
+        
+        // บันทึก Guideline
+        async function saveGuideline() {
+            const id = document.getElementById('guidelineId').value;
+            const title = document.getElementById('formTitle').value;
+            const category = document.getElementById('formCategory').value;
+            const groupName = document.getElementById('formGroupName').value;
+            const deptCode = document.getElementById('formDepartmentCode').value;
+            const deptName = document.getElementById('formDepartmentName').value;
+            const pdfLink = document.getElementById('formPdfLink').value;
+            
+            if (!title || !category || !groupName || !deptCode || !pdfLink) {
+                showToast('กรุณากรอกข้อมูลให้ครบถ้วน', 'warning');
+                return;
+            }
+            
+            showLoading(true, id ? 'กำลังแก้ไข...' : 'กำลังบันทึก...');
+            
+            try {
+                const action = id ? 'updateGuideline' : 'addGuideline';
+                const response = await fetch(GAS_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' }, // 🛑 แก้ปัญหา CORS
+                    body: JSON.stringify({
+                        action: action,
+                        data: {
+                            ID: id || generateId(),
+                            Title: title,
+                            Category: category,
+                            GroupName: groupName,
+                            DepartmentCode: deptCode,
+                            DepartmentName: deptName,
+                            PDF_Link: pdfLink,
+                            Created_Date: id ? allGuidelines.find(g => g.ID === id)?.Created_Date : new Date().toISOString().split('T')[0],
+                            Created_By: currentUser.username
+                        }
+                    })
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    showToast(id ? 'แก้ไขข้อมูลสำเร็จ' : 'เพิ่มข้อมูลสำเร็จ', 'success');
+                    bootstrap.Modal.getInstance(document.getElementById('guidelineModal')).hide();
+                    loadGuidelines();
+                } else {
+                    showToast(result.message || 'เกิดข้อผิดพลาด', 'danger');
+                }
+            } catch (error) {
+                console.error('Error saving guideline:', error);
+                showToast('ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้', 'danger');
+            } finally {
+                showLoading(false);
+            }
+        }
+        
+        // แสดง Modal ลบ
+        function showDeleteModal(id) {
+            document.getElementById('deleteGuidelineId').value = id;
+            new bootstrap.Modal(document.getElementById('deleteModal')).show();
+        }
+        
+        // ยืนยันการลบ
+        async function confirmDelete() {
+            const id = document.getElementById('deleteGuidelineId').value;
+            
+            showLoading(true, 'กำลังลบ...');
+            
+            try {
+                const response = await fetch(GAS_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' }, // 🛑 แก้ปัญหา CORS
+                    body: JSON.stringify({
+                        action: 'deleteGuideline',
+                        id: id
+                    })
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    showToast('ลบข้อมูลสำเร็จ', 'success');
+                    bootstrap.Modal.getInstance(document.getElementById('deleteModal')).hide();
+                    loadGuidelines();
+                } else {
+                    showToast(result.message || 'เกิดข้อผิดพลาด', 'danger');
+                }
+            } catch (error) {
+                console.error('Error deleting guideline:', error);
+                showToast('ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้', 'danger');
+            } finally {
+                showLoading(false);
+            }
+        }
+        
+        // Generate ID ใหม่
+        function generateId() {
+            const num = Date.now().toString().slice(-4);
+            return `GUIDE-${num}`;
+        }
+        
+        // Format วันที่
+        function formatDate(dateStr) {
+            if (!dateStr) return '-';
+            const date = new Date(dateStr);
+            return date.toLocaleDateString('th-TH', {
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric'
+            });
+        }
+        
+        // แสดง/ซ่อน Loading
+        function showLoading(show, text = 'กำลังโหลด...') {
+            const overlay = document.getElementById('loadingOverlay');
+            document.getElementById('loadingText').textContent = text;
+            overlay.classList.toggle('active', show);
+        }
+        
+        // แสดง Toast
+        function showToast(message, type = 'info') {
+            const container = document.getElementById('toastContainer');
+            const toastId = 'toast-' + Date.now();
+            
+            const icons = {
+                success: 'bi-check-circle-fill',
+                danger: 'bi-exclamation-triangle-fill',
+                warning: 'bi-exclamation-circle-fill',
+                info: 'bi-info-circle-fill'
+            };
+            
+            const bgColors = {
+                success: 'bg-success',
+                danger: 'bg-danger',
+                warning: 'bg-warning',
+                info: 'bg-primary'
+            };
+            
+            const toast = `
+                <div id="${toastId}" class="toast show align-items-center text-white ${bgColors[type]}" role="alert">
+                    <div class="d-flex">
+                        <div class="toast-body">
+                            <i class="bi ${icons[type]} me-2"></i>${message}
+                        </div>
+                        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+                    </div>
+                </div>
+            `;
+            
+            container.insertAdjacentHTML('beforeend', toast);
+            
+            setTimeout(() => {
+                const el = document.getElementById(toastId);
+                if (el) el.remove();
+            }, 3000);
+        }
+        
+        // Logout
+        function logout() {
+            localStorage.removeItem('cnpg_user');
+            localStorage.removeItem('cnpg_token');
+            window.location.href = 'index.html';
+        }
+        
+        // แสดงรายการ Guideline (สำหรับกดเมนู Navbar)
+        function showGuidelineList() {
+            document.querySelector('.nav-link.active')?.classList.remove('active');
+            event.currentTarget.classList.add('active');
+            loadGuidelines();
+        }
+        
+        // Search on Enter
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchGuidelines();
+            }
+        });
+    </script>
+</body>
+</html>
