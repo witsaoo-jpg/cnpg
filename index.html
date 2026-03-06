@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CNPG - Clinical Nursing Practice Guideline System | โรงพยาบาลชลบุรี</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@fontsource/sarabun@5.0.0/index.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-blue: #1e3a8a;
+            --secondary-blue: #3b82f6;
+            --light-blue: #dbeafe;
+            --medical-white: #f8fafc;
+            --medical-gray: #e2e8f0;
+            --success-green: #10b981;
+            --warning-orange: #f59e0b;
+            --danger-red: #ef4444;
+        }
+        
+        * {
+            font-family: 'Sarabun', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, var(--medical-white) 0%, var(--light-blue) 100%);
+            min-height: 100vh;
+        }
+        
+        .login-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .login-card {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(30, 58, 138, 0.15);
+            border: none;
+            overflow: hidden;
+            max-width: 450px;
+            width: 100%;
+        }
+        
+        .login-header {
+            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--secondary-blue) 100%);
+            padding: 40px 30px;
+            text-align: center;
+            color: white;
+        }
+        
+        .login-header img {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: white;
+            padding: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+        
+        .login-header h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+        
+        .login-header p {
+            font-size: 0.95rem;
+            opacity: 0.9;
+            margin: 0;
+        }
+        
+        .login-body {
+            padding: 40px 30px;
+        }
+        
+        .form-control {
+            border-radius: 10px;
+            border: 2px solid var(--medical-gray);
+            padding: 12px 15px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .form-control:focus {
+            border-color: var(--secondary-blue);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+        }
+        
+        .form-label {
+            font-weight: 600;
+            color: var(--primary-blue);
+            margin-bottom: 8px;
+        }
+        
+        .input-group-text {
+            background: var(--light-blue);
+            border: 2px solid var(--medical-gray);
+            color: var(--primary-blue);
+        }
+        
+        .btn-login {
+            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--secondary-blue) 100%);
+            border: none;
+            border-radius: 10px;
+            padding: 14px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+        
+        .btn-login:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(30, 58, 138, 0.3);
+        }
+        
+        .alert {
+            border-radius: 10px;
+            border: none;
+        }
+        
+        .footer-text {
+            text-align: center;
+            color: #64748b;
+            font-size: 0.85rem;
+            margin-top: 20px;
+        }
+        
+        .loading-spinner {
+            display: none;
+        }
+        
+        .btn-login.loading .loading-spinner {
+            display: inline-block;
+        }
+        
+        .btn-login.loading .btn-text {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-card">
+            <div class="login-header">
+                <img src="https://image.qwenlm.ai/public_source/88af0300-2ede-49aa-a1e1-50cd82aa4c25/166cefe98-3f1e-415b-a28e-61da161d2a4d.png" alt="CNPG Logo">
+                <h1>CNPG System</h1>
+                <p>Clinical Nursing Practice Guideline</p>
+                <p style="margin-top: 10px; font-size: 1.1rem;">โรงพยาบาลชลบุรี</p>
+            </div>
+            <div class="login-body">
+                <div id="loginAlert" class="alert alert-danger d-none" role="alert">
+                    <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                    <span id="loginAlertMessage">ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง</span>
+                </div>
+                
+                <form id="loginForm">
+                    <div class="mb-4">
+                        <label for="username" class="form-label">
+                            <i class="bi bi-person-fill me-2"></i>ชื่อผู้ใช้
+                        </label>
+                        <div class="input-group">
+                            <span class="input-group-text">
+                                <i class="bi bi-person"></i>
+                            </span>
+                            <input type="text" class="form-control" id="username" placeholder="กรอกชื่อผู้ใช้" required>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label for="password" class="form-label">
+                            <i class="bi bi-lock-fill me-2"></i>รหัสผ่าน
+                        </label>
+                        <div class="input-group">
+                            <span class="input-group-text">
+                                <i class="bi bi-lock"></i>
+                            </span>
+                            <input type="password" class="form-control" id="password" placeholder="กรอกรหัสผ่าน" required>
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary btn-login" id="btnLogin">
+                        <span class="btn-text">
+                            <i class="bi bi-box-arrow-in-right me-2"></i>เข้าสู่ระบบ
+                        </span>
+                        <span class="loading-spinner spinner-border spinner-border-sm" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </span>
+                    </button>
+                </form>
+                
+                <div class="footer-text">
+                    <p class="mb-1">© 2026 โรงพยาบาลชลบุรี</p>
+                    <p class="mb-0">ระบบฐานความรู้พยาบาล CNPG</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+  <script>
+        // ใส่ URL ของคุณทีตรงนี้ครับ
+        const GAS_URL = 'https://script.google.com/macros/s/AKfycbx5u9vEesY18yBkXt-oIqw_QD1yeOmig9GWB9THxcGUNJaIfQRNUzlf17CtP9v7LFIt/exec';
+        
+        // ตรวจสอบว่ามี session อยู่แล้วหรือไม่
+        document.addEventListener('DOMContentLoaded', function() {
+            const currentUser = localStorage.getItem('cnpg_user');
+            if (currentUser) {
+                window.location.href = 'dashboard.html';
+            }
+        });
+        
+        // Handle login form submission
+        document.getElementById('loginForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value;
+            const btnLogin = document.getElementById('btnLogin');
+            const loginAlert = document.getElementById('loginAlert');
+            
+            // Show loading state
+            btnLogin.classList.add('loading');
+            btnLogin.disabled = true;
+            loginAlert.classList.add('d-none');
+            
+            try {
+                const response = await fetch(GAS_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'text/plain;charset=utf-8', // ปรับ Header เพื่อหลีกเลี่ยงปัญหา CORS
+                    },
+                    body: JSON.stringify({
+                        action: 'loginUser',
+                        username: username,
+                        password: password
+                    })
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    // Store user info
+                    localStorage.setItem('cnpg_user', JSON.stringify(result.data));
+                    localStorage.setItem('cnpg_token', result.token || 'authenticated');
+                    
+                    // Redirect to dashboard
+                    window.location.href = 'dashboard.html';
+                } else {
+                    // Show error
+                    loginAlert.querySelector('span').textContent = result.message || 'ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง';
+                    loginAlert.classList.remove('d-none');
+                }
+            } catch (error) {
+                console.error('Login error:', error);
+                loginAlert.querySelector('span').textContent = 'เกิดข้อผิดพลาดในการเชื่อมต่อ ตรวจสอบ URL หรืออินเทอร์เน็ต';
+                loginAlert.classList.remove('d-none');
+            } finally {
+                // Remove loading state
+                btnLogin.classList.remove('loading');
+                btnLogin.disabled = false;
+            }
+        });
+        
+        // Allow Enter key to submit
+        document.getElementById('password').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                document.getElementById('loginForm').requestSubmit();
+            }
+        });
+    </script>
+</body>
+</html>
